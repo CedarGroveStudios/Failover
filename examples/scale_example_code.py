@@ -11,7 +11,7 @@ code.py  2022-09-02 v2.0  Cedar Grove Studios
 * Author(s): JG for Cedar Grove Maker Studios
 """
 
-# imports__version__ = "0.0.0-auto.0"
+# imports__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/CedarGroveStudios/Scale"
 
 # Uncomment the following to calibrate touch screen for a built-in display
