@@ -6,7 +6,7 @@
 ================================================================================
 
 Used after a fatal error to dim the display to keep the board cooler. Flashes
-the NeoPixel during a pre-reset delay. Microcontroller is reset after the delay.
+L13 (red LED) during a pre-reset delay. Microcontroller is reset after the delay.
 
 pyportal_failover.py  2022-10-25 1.0.1  Cedar Grove Studios
 
@@ -18,25 +18,24 @@ __repo__ = "https://github.com/CedarGroveStudios/Failover"
 
 
 import board
-immport time
+import time
 import microcontroller
-import neopixel
+import digitalio
 
 DELAY = 20  # seconds
 
-status = neopixel.NeoPixel(board.NEOPIXEL, 1)
-status[0] = 0x040000  # Glow red on exception
-board.DISPLAY.brightness = 0.5  # Dim the REPL display to keep things cool
+led = digitalio.DigitalInOut(board.LED)
+led.direction = digitalio.Direction.OUTPUT
+led.value = True
+
+board.DISPLAY.brightness = 0.2  # Dim the REPL display to keep things cool
 
 print("pyportal_failover: begin reset delay")
 end_delay = time.monotonic() + DELAY
 while time.monotonic() < end_delay:
-    """Flash NeoPixel during delay period."""
-    time.sleep(1)
-    if status[0] != (0, 0, 0):
-        status[0] = 0x000000
-    else:
-        status[0] = 0x040000
+    """Flash red LED during delay period."""
+    time.sleep(0.5)
+    led.value = not led.value
 
 print("pyportal_failover: resetting microcontroller")
 microcontroller.reset()
